@@ -6,6 +6,7 @@ I have implemented all oops concepts in this project.
  
     git clone https://github.com/a-ris0n/Banking-System.git \src
     cd src
+    mkdir bin/
     make
     ./bin/bankingSystem
 
