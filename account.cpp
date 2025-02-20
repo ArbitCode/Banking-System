@@ -15,7 +15,7 @@ void Account::deposit(float amount){
 
 void Account::withdraw(float amount){
   if(balance -amount < MIN_BALANCE){
-    throw InsufficientFunds();
+    throw std::invalid_argument("Insufficient Fund!");
   }
   balance -= amount;
 }

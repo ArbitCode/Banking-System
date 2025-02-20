@@ -1,21 +1,16 @@
 CC = g++
-CFLAGS = -std=c++14
+CXXFLAGS = -std=c++17 -Wall -Wextra -O2 -I/usr/local/include
+LDFLAGS =  /root/workspace/Banking-System/nanodbc/build/libnanodbc.a -lodbc
 
+TARGET = bankingSystem
+
+SRC = bankingSystem.cpp \
+			bank.cpp \
+			account.cpp
 # Targets and rules
-all: bankingSystem
+all: $(TARGET)
 
-bankingSystem: bank.o account.o bankingSystem.o
-	$(CC) $(CFLAGS) bin/bank.o bin/account.o bin/bankingSystem.o -o bin/bankingSystem
-
-bankingSystem.o: bankingSystem.cpp
-	$(CC) $(CFLAGS) -c bankingSystem.cpp -o bin/bankingSystem.o
-
-bank.o: bank.cpp
-	$(CC) $(CFLAGS) -c bank.cpp -o bin/bank.o
-
-account.o: account.cpp
-	$(CC) $(CFLAGS) -c account.cpp -o bin/account.o
-
+$(TARGET): ${SRC}
+	$(CC) $(CXXFLAGS) -o $(TARGET) $(SRC) $(LDFLAGS)
 clean:
-	rm bin/*.o bin/bankingSystem
-
+	rm -f $(TARGET)
