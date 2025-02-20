@@ -62,7 +62,7 @@ bool connectDB()
 int main()
 {
   if (connectDB()){
-    cout << "\n\t\tDB Connected!\n";
+    cout << "\n\t\tDB Connected sucessfully!\n";
   }
   Bank b;
   Account acc;
