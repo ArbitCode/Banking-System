@@ -45,9 +45,9 @@ ifstream &operator>>(ifstream &ifs, Account &acc){
 }
 
 ostream &operator<<(ostream &os, Account &acc){
+  os << "Account Number: " << acc.getAccNo() << std::endl;
   os << "First Name: " << acc.getFirstName() << std::endl;
   os << "Last Name: " << acc.getLastName() << std::endl;
-  os << "Account Number: " << acc.getAccNo() << std::endl;
   os << "Balance: " << acc.getBalance() << std::endl;
   return os;
 }

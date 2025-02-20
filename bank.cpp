@@ -5,7 +5,7 @@ Bank::Bank(){
   ifstream infile;
   infile.open("Bank.data");
   if(!infile){
-    std::cout << "Error in Opening! File Not Found!!" << std::endl;
+    std::cout << "\nError in Opening! File Not Found!!" << std::endl;
     return;
   }
   while(!infile.eof()){
@@ -50,15 +50,14 @@ Account Bank::withdraw(long accountNumber, float amount){
 
 void Bank::closeAccount(long accountNumber){
   auto it = accounts.find(accountNumber);
-  std::cout << "Account Deleted: " << it->second;
+  std::cout << "\nAccount Deleted: " << it->second;
   accounts.erase(accountNumber);
 }
 
 void Bank::showAllAccounts()
 {
   for(auto it : accounts)
-    std::cout << "Account " << it.first << std::endl
-              << it.second << std::endl;
+    std::cout << "\nAccount " << it.second << std::endl;
 }
 
 Bank::~Bank(){

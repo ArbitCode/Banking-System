@@ -49,6 +49,7 @@ int main()
   cout << "\n----------------------------";
   do
   {
+    cout << "\n----------------------------";
     cout << "\n\tSelect one option below ";
     cout << "\n\t1. Open an Account";
     cout << "\n\t2. Balance Enquiry";
@@ -59,53 +60,53 @@ int main()
     cout << "\n\t7. Quit";
     cout << "\n----------------------------";
     cout << "\nEnter your choice(1-7): ";
-
     getInput(choice);
+    cout << "\n----------------------------";
     ops = static_cast<Ops>(choice);
 
     switch (ops){
     case Ops::OPEN_ACCOUNT:
-      cout << "Enter First Name: ";
+      cout << "\nEnter First Name: ";
       getInput(fname);
-      cout << "Enter Last Name: ";
+      cout << "\nEnter Last Name: ";
       getInput(lname);
-      cout << "Enter initial Balance: ";
+      cout << "\nEnter initial Balance: ";
       getInput(balance);
       acc = b.openAccount(fname, lname, balance);
       cout << endl
-           << "Congratulation Account is Created" << endl;
+           << "\nCongratulation Account is Created" << endl;
       cout << acc;
       break;
     case Ops::BALANCE_ENQUIRY:
-      cout << "Enter Account Number: ";
+      cout << "\nEnter Account Number: ";
       getInput(accountNumber);
       acc = b.balanceEnquiry(accountNumber);
       cout << endl
-           << "Your Account Details" << endl;
+           << "\nYour Account Details" << endl;
       cout << acc;
       break;
     case Ops::DEPOSIT:
-      cout << "Enter Account Number: ";
+      cout << "\nEnter Account Number: ";
       getInput(accountNumber);
-      cout << "Enter Balance: ";
+      cout << "\nEnter Balance: ";
       getInput(amount);
       acc = b.deposit(accountNumber, amount);
       cout << endl
-           << "Amout is Deposited" << endl;
+           << "\nAmout is Deposited" << endl;
       cout << acc;
       break;
     case Ops::WITHDRAW:
-      cout << "Enter Account Number: ";
+      cout << "\nEnter Account Number: ";
       getInput(accountNumber);
-      cout << "Enter Balance: ";
+      cout << "\nEnter Balance: ";
       getInput(amount);
       acc = b.withdraw(accountNumber, amount);
       cout << endl
-           << "Amount withdrawn" << endl;
+           << "\nAmount withdrawn" << endl;
       cout << acc;
       break;
     case Ops::CLOSE_ACCOUNT:
-      cout << "Enter Account Number: ";
+      cout << "\nEnter Account Number: ";
       getInput(accountNumber);
       b.closeAccount(accountNumber);
       break;
@@ -113,10 +114,11 @@ int main()
       b.showAllAccounts();
       break;
     case Ops::QUIT:
-      cout << "Thank you!";
+      cout << "\nThank you!\n";
       break;
     default:
-      cout << "\nEnter correct choice: ";
+      cout << "\n\tERROR: Enter correct choice!";
+      cout << "\n----------------------------";
     }
   } while (ops != Ops::QUIT);
 
