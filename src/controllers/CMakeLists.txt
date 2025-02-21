@@ -1,0 +1,2 @@
+add_library(controllers AccountController.cpp TransactionController.cpp)
+target_link_libraries(controllers routes)

@@ -1,31 +1,41 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.1)
 project(BankSystemBackend)
 
-# Set C++ standard
+#Set CXX Standard
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Find required packages
+#Find required packages
 find_package(Threads REQUIRED)
-
-# Include Crow and Nanodbc from /usr/local/include
-include_directories(/usr/local/include)
-
-# PostgreSQL ODBC driver
 find_package(ODBC REQUIRED)
 
-# Define source files
-set(SOURCES
-    src/main.cpp
-    src/routes/Routes.cpp
-    src/controllers/AccountController.cpp
-    src/controllers/TransactionController.cpp
-    src/services/AccountService.cpp
-    src/services/TransactionService.cpp
-)
+#include Crow and nanodbc from /usr/local/include
+include_directories(/usr/local/include)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-# Create the executable
-add_executable(bank_backend ${SOURCES})
+#Add add_subdirectory()
+add_subdirectory(src)
 
-# Link libraries
-target_link_libraries(bank_backend Threads::Threads nanodbc odbc)
+#installation setup
+install(TARGETS bank_backend DESTINATION bin)
+
+#find all shared libraries required by the exeutable
+set(BANK_BACKEND_EXECUTABLE ${CMAKE_BINARY_DIR}/bin/bank_backend)
+
+#install required shared libraries
+set(CPACK_GENERATOR "TGZ;DEB;RPM")
+set(CPACK_PACKAGE_NAME "BankSystemBackend")
+set(CPACK_PACKAGE_VERSION "1.0.0")
+set(CPACK_PACKAGE_DESCRIPTION "Bank System Backend - A secure banking API")
+set(CPACK_PACKAGE_VENDOR "ArbitCode")
+set(CPACK_PACKAGE_CONTACT "rajaramsharma422@gmail.com")
+
+#Define package dependencies for DEB and RPM
+set(CPACK_DEBIAN_PACKAE_DEPENDS "odbc, libboost-all-dev")
+set(CPACK_RPM_PACKAGE_REQUIRES "odbc, boost")
+
+#enable CPack packaging
+include(CPack)
+

@@ -9,6 +9,8 @@
 * [X] Account management (Open/Close/View account, List accounts)
 * [X] Transactions (deposits, withdrawals, transfers)
 * [X] Transaction history (list of past transactions)
+* [X] Query Injection (Global, precompiled, flyweight);
+* [X] Logging
 * [ ] Admin panel (manage users, view transactions)
 
 #### **Web (React + Vite + Axios + React Router)**
