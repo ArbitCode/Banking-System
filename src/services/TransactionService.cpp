@@ -1,44 +1,36 @@
 #include "TransactionService.h"
 #include<crow.h>
+#include "../database/QueryRegister.h"
 
 std::variant<Transaction, std::string> TransactionService::transaction(nanodbc::connection &conn, int accountNumber, double amount, std::string &remark){
-	// update account
 	try{
-	std::string qurery =  R"(WITH updated AS (
-                            UPDATE accounts
-                            SET balance = CASE
-                                WHEN ? < 0 AND balance + ? < 0 THEN balance
-                                ELSE balance + ?
-                                END
-                            WHERE id = ?
-                            RETURNING id, owner_name, balance, (balance + ? >= 0) AS success
-                        ),
-                        inserted AS (
-                            INSERT INTO transactions (account_id, amount, transaction_type, remark)
-                            SELECT ?, ?, CASE WHEN ? >= 0 THEN 'credit' ELSE 'debit' END, ?
-                            WHERE EXISTS (SELECT 1 FROM updated WHERE success)
-                            RETURNING id, created_at, account_id, amount, transaction_type, remark
-                        )
-                        SELECT * FROM inserted;
-                      )";
 
 	nanodbc::statement stmt(conn);
-	nanodbc::prepare(stmt, qurery);
-	stmt.bind(0, &amount);
-	stmt.bind(1, &amount);
-	stmt.bind(2, &amount);
-	stmt.bind(3, &accountNumber);
-	stmt.bind(4, &amount);
-	stmt.bind(5, &accountNumber);
-	stmt.bind(6, &amount);
-	stmt.bind(7, &amount);
-	stmt.bind(8, remark.c_str());
+	auto queryRegister = QueryRegister::get_instance();
+	if (queryRegister)
+	{
+		std::string query = QueryRegister::get_instance()->getQuery("SQL_QUERY_PUT_CREDT_DEBIT_TRANSACTION");
+		if (!query.empty())
+		{
+			nanodbc::prepare(stmt, query);
+			stmt.bind(0, &amount);
+			stmt.bind(1, &amount);
+			stmt.bind(2, &amount);
+			stmt.bind(3, &accountNumber);
+			stmt.bind(4, &amount);
+			stmt.bind(5, &accountNumber);
+			stmt.bind(6, &amount);
+			stmt.bind(7, &amount);
+			stmt.bind(8, remark.c_str());
 
-		nanodbc::result response = nanodbc::execute(stmt);
-		if (!response.next()){
-			return "Insufficient funds!";
+			nanodbc::result response = nanodbc::execute(stmt);
+			if (!response.next())
+			{
+				return "Insufficient funds!";
+			}
+			return Transaction{response.get<int>(0), response.get<std::string>(1), response.get<int>(2), response.get<double>(3), response.get<std::string>(4), response.get<std::string>(5)};
 		}
-		return Transaction{response.get<int>(0), response.get<std::string>(1), response.get<int>(2), response.get<double>(3), response.get<std::string>(4), response.get<std::string>(5)};
+	}
 	}
 	catch(std::exception &ex){
 		std::cout << "Transaction Error: " << ex.what() << std::endl;
@@ -49,12 +41,20 @@ std::variant<Transaction, std::string> TransactionService::transaction(nanodbc::
 std::optional<Transaction> TransactionService::getTransaction(nanodbc::connection &conn, int transactionId){
 	try{
 		nanodbc::statement stmt(conn);
-		nanodbc::prepare(stmt, "SELECT id, created_at, account_id, amount, transaction_type, remark FROM transactions WHERE id = ?");
-		stmt.bind(0, &transactionId);
-		nanodbc::result response = nanodbc::execute(stmt);
-		if (response.next())
+		auto queryRegister = QueryRegister::get_instance();
+		if (queryRegister)
 		{
-			return Transaction{response.get<int>(0), response.get<std::string>(1), response.get<int>(2), response.get<double>(3), response.get<std::string>(4), response.get<std::string>(5)};
+			std::string query = QueryRegister::get_instance()->getQuery("SQL_QUERY_GET_TRANSACTION_BY_ID");
+			if (!query.empty())
+			{
+				nanodbc::prepare(stmt, query);
+				stmt.bind(0, &transactionId);
+				nanodbc::result response = nanodbc::execute(stmt);
+				if (response.next())
+				{
+					return Transaction{response.get<int>(0), response.get<std::string>(1), response.get<int>(2), response.get<double>(3), response.get<std::string>(4), response.get<std::string>(5)};
+				}
+			}
 		}
 		}
 		catch(const std::exception &ex)

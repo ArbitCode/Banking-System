@@ -11,6 +11,7 @@
 * [X] Transaction history (list of past transactions)
 * [X] Query Injection (Global, precompiled, flyweight);
 * [X] Logging
+* [ ] UnitTest (CTEST/GTEST)
 * [ ] Admin panel (manage users, view transactions)
 
 #### **Web (React + Vite + Axios + React Router)**
