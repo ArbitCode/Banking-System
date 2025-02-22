@@ -13,6 +13,7 @@ void setupAccountRoutes(crow::SimpleApp &app, nanodbc::connection &conn)
 				};
 				return crow::response(200, respose.dump());
 			}
+			CROW_LOG_ERROR << "Account not found.";
 			return crow::response(404, "Account not found"); });
 
 	CROW_ROUTE(app, "/account/<int>")
@@ -24,6 +25,7 @@ void setupAccountRoutes(crow::SimpleApp &app, nanodbc::connection &conn)
 			.methods(crow::HTTPMethod::POST)([&conn](const crow::request &req)
 																			 { auto body = crow::json::load(req.body); 
 			if(!body || !body.has("owner_name") || !body.has("balance")){
+				CROW_LOG_ERROR << "Invalid request body";
 				return crow::response(400, "Invalid request");
 			}
 			std::string owner_name = body["owner_name"].s(); 
@@ -38,6 +40,7 @@ void setupAccountRoutes(crow::SimpleApp &app, nanodbc::connection &conn)
 				res.set_header("Content-Type", "application/json");
 				return res;
 			}
+			CROW_LOG_ERROR << "Account create failed.";
 			return crow::response(500, "Failed to create account"); });
 
 	CROW_ROUTE(app, "/accounts")

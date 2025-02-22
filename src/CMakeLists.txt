@@ -10,7 +10,7 @@ set(SOURCES
 add_executable(bank_backend ${SOURCES})
 
 #Link libraries
-target_link_libraries(bank_backend Threads::Threads nanodbc odbc routes controllers services)
+target_link_libraries(bank_backend  PRIVATE CLI11::CLI11 Threads::Threads nanodbc odbc routes controllers services)
 # Ensure log directory exists
 add_custom_command(
     TARGET bank_backend POST_BUILD

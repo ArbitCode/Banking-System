@@ -2,6 +2,7 @@
 #include <iostream>
 #include<vector>
 #include "../database/QueryRegister.h"
+#include <crow/logging.h>
 
 int AccountService::createAccount(nanodbc::connection &conn, const std::string &owner_name, double balance)
 {
@@ -23,12 +24,14 @@ int AccountService::createAccount(nanodbc::connection &conn, const std::string &
 				}
 			}
 		}
-		return -1;
+		else{
+			CROW_LOG_ERROR << "Query Register is nullptr";
+		}
 	}
-	catch(std::exception& e){
-		std::cerr << "Error creating account: " << e.what() << std::endl;
-		return false;
+	catch(std::exception& ex){
+		CROW_LOG_CRITICAL << "Creat account failed: " << ex.what();
 	}
+	return -1;
 }
 
 std::optional<Account> AccountService::getAccountById(nanodbc::connection &conn, int id)
@@ -51,10 +54,13 @@ std::optional<Account> AccountService::getAccountById(nanodbc::connection &conn,
 				}
 			}
 		}
+		else{
+			CROW_LOG_ERROR << "Query Register is nullptr";
+		}
 	}
 	catch(const std::exception &ex)
 	{
-		std::cerr << "Error fetching account: " << ex.what() << std::endl;
+		CROW_LOG_CRITICAL << "Get accunt details failed: " << ex.what();
 	}
 
 	return std::nullopt;
@@ -75,9 +81,13 @@ void AccountService::deleteAccount(nanodbc::connection &conn, int id)
 				nanodbc::execute(stmt);
 			}
 		}
+		else
+		{
+			CROW_LOG_ERROR << "Query Register is nullptr";
+		}
 	}
 	catch(const std::exception &ex){
-		std::cerr << "Error deleting account: " << ex.what() << std::endl;
+		CROW_LOG_CRITICAL << "Delete account failed: " << ex.what();
 	}
 }
 
@@ -104,12 +114,15 @@ std::vector<Account> AccountService::listAccounts(nanodbc::connection &conn)
 					accounts.push_back(acc);
 				}
 				}
-			}
-				
+		}
+		else
+		{
+			CROW_LOG_ERROR << "Query Register is nullptr";
+		}
 			}
 			catch (std::exception &ex)
 			{
-				std::cerr << "Error Account List: " << ex.what() << std::endl;
+				CROW_LOG_CRITICAL << "Account list failed: " << ex.what();
 			}
 			return accounts;
 		}
@@ -141,10 +154,14 @@ std::vector<Transaction> AccountService::listAccountTransactions(nanodbc::connec
 				}
 			}
 		}
+		else
+		{
+			CROW_LOG_ERROR << "Query Register is nullptr";
+		}
 	}
 	catch (std::exception &ex)
 	{
-		std::cerr << "Error transaction List: " << ex.what() << std::endl;
+		CROW_LOG_CRITICAL << "Transaction List failed: " << ex.what();
 	}
 	return transactions;
 }

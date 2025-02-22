@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5.1)
 project(BankSystemBackend)
 
 #Set CXX Standard
@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 #Find required packages
 find_package(Threads REQUIRED)
 find_package(ODBC REQUIRED)
+find_package(CLI11 CONFIG REQUIRED)
 
 #include Crow and nanodbc from /usr/local/include
 include_directories(/usr/local/include)
