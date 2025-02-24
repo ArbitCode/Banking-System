@@ -1,0 +1,12 @@
+[submodule "libs/nanodbc"]
+	path = libs/nanodbc
+	url = https://github.com/nanodbc/nanodbc.git
+[submodule "libs/cli11"]
+	path = libs/cli11
+	url = https://github.com/CLIUtils/CLI11.git
+[submodule "libs/cpp-dotenv"]
+	path = libs/cpp-dotenv
+	url = https://github.com/adeharo9/cpp-dotenv.git
+[submodule "libs/Crow"]
+	path = libs/Crow
+	url = https://github.com/CrowCpp/Crow.git
