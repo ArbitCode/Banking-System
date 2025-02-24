@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 find_package(Threads REQUIRED)
 find_package(ODBC REQUIRED)
 find_package(CLI11 CONFIG REQUIRED)
+find_package(GTest REQUIRED)
 
 #include Crow and nanodbc from /usr/local/include
 include_directories(/usr/local/include)
@@ -18,6 +19,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 #Add add_subdirectory()
 add_subdirectory(src)
+add_subdirectory(cpp-dotenv)
+#add_subdirectory(tests)
 
 #installation setup
 install(TARGETS bank_backend DESTINATION bin)

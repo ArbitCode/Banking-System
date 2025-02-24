@@ -1,0 +1,81 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: "Raja Ram Sharma"
+      changes:
+        - createTable:
+            tableName: accounts
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: owner_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: balance
+                  type: double precision
+                  constraints:
+                    nullable: false
+  - changeSet:
+        id: 2
+        author: "Raja Ram Sharma"
+        changes:
+          - createTable:
+              tableName: transactions
+              columns:
+                - column:
+                    name: id
+                    type: serial
+                    constraints:
+                      nullable: false
+                      primaryKey: true
+                - column:
+                    name: account_id
+                    type: int
+                    constraints:
+                      nullable: false
+                - column:
+                    name: amount
+                    type: numeric(15,2)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: transaction_type
+                    type: varchar(10)
+                    constraints:
+                      nullable: true
+                - column:
+                    name: remark
+                    type: text
+                    constraints:
+                      nullable: true
+                      defaultValue: ''
+                - column:
+                    name: created_at
+                    type: timestamp
+                    constraints:
+                      nullable: true
+                    defaultValueComputed: CURRENT_TIMESTAMP
+          - addForeignKeyConstraint:
+              constraintName: transactions_account_id_fkey
+              baseTableName: transactions
+              baseColumnNames: account_id
+              referencedTableName: accounts
+              referencedColumnNames: id
+              onDelete: CASCADE
+  - changeSet:
+      id: 3
+      author: "Raja Ram Sharma"
+      changes:
+        - sql:
+            dbms: postgres
+            sql: |
+              ALTER TABLE transactions
+              ADD CONSTRAINT transactions_transaction_type_check
+              CHECK (transaction_type IN ('credit', 'debit'));

@@ -3,6 +3,8 @@
 3. FRONT-END : ??
 4. Logging : Boost.Log/log4cplus
 
+#### Opensource Lib : CLI : CLI11, .env: dotenv-cpp, webframework: CROW, DB: Nanodbc
+
 #### **Backend (Crow + Nanodbc + ODBC + PostgreSQL)**
 
 * [ ] User authentication (signup, login, JWT-based auth)
@@ -11,9 +13,9 @@
 * [X] Transaction history (list of past transactions)
 * [X] Query Injection (Global, precompiled, flyweight);
 * [X] Logging
-* [ ] Smart Pointer
-* [ ] UnitTest (CTEST/GTEST)
-* [ ] Admin panel (manage users, view transactions)
+* [X] database sechema sync (liquibase)
+* [X] UnitTest (GTEST)
+* [ ] Admin panel (manage users, view transactions) - Bank [department, staff, customer, role]
 
 #### **Web (React + Vite + Axios + React Router)**
 
