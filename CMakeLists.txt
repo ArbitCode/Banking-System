@@ -19,7 +19,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 #Add add_subdirectory()
 add_subdirectory(src)
-add_subdirectory(cpp-dotenv)
+add_subdirectory(libs/cpp-dotenv)
 #add_subdirectory(tests)
 
 #installation setup
