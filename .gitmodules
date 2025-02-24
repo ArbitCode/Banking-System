@@ -10,3 +10,6 @@
 [submodule "libs/Crow"]
 	path = libs/Crow
 	url = https://github.com/CrowCpp/Crow.git
+[submodule "libs/cpr"]
+	path = libs/cpr
+	url = https://github.com/libcpr/cpr.git

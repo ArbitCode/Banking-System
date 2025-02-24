@@ -13,6 +13,7 @@ find_package(GTest REQUIRED)
 
 #include Crow and nanodbc from /usr/local/include
 include_directories(/usr/local/include)
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -20,7 +21,8 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 #Add add_subdirectory()
 add_subdirectory(src)
 add_subdirectory(libs/cpp-dotenv)
-#add_subdirectory(tests)
+add_subdirectory(libs/cpr)
+add_subdirectory(tests)
 
 #installation setup
 install(TARGETS bank_backend DESTINATION bin)

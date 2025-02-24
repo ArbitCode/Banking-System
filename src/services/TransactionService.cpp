@@ -77,33 +77,35 @@ std::variant<Transaction, std::string> TransactionService::transferAmount(nanodb
 {
 	try{
 	//debit : Source Account
+	std::variant<Transaction, std::string> result;
+
 	int debit_src_amt = -1.0 * amount;
-	std::string debit_remark = remark + "/Tranfer to account_id : " + std::to_string(targetAccountId);
-	auto debit_result = transaction(conn, sourceAccountId, debit_src_amt, debit_remark); //t1
-	if(std::holds_alternative<std::string>(debit_result)){
-		CROW_LOG_ERROR << "Debit transaction failed remark: " << debit_remark << "Error: " << std::get<std::string>(debit_result);
-		return debit_remark + " Failed : " + std::get<std::string>(debit_result); // debit failed.
+	std::string debit_remark = remark + ": Tranfer to account_id : " + std::to_string(targetAccountId);
+	result = transaction(conn, sourceAccountId, debit_src_amt, debit_remark); //t1
+	if(std::holds_alternative<std::string>(result)){
+		CROW_LOG_ERROR << "Debit transaction failed remark: " << debit_remark << "Error: " << std::get<std::string>(result);
+		return debit_remark + " Failed : " + std::get<std::string>(result); // debit failed.
 	}
 	//success
 
 	// credit: Target Account
 	int credit_target_amt = -1.0 * debit_src_amt;
-	std::string credit_remark = remark + "/Received from account_id: " + std::to_string(sourceAccountId);
-	auto credit_result = transaction(conn, targetAccountId, credit_target_amt, credit_remark); //t2
-	if (std::holds_alternative<std::string>(credit_result)){
-		CROW_LOG_ERROR << "Credit transaction failed remark: " << credit_remark << "Error: " << std::get<std::string>(credit_result);
+	std::string credit_remark = remark + ": Received from account_id: " + std::to_string(sourceAccountId);
+	result = transaction(conn, targetAccountId, credit_target_amt, credit_remark); //t2
+	if (std::holds_alternative<std::string>(result)){
+		CROW_LOG_ERROR << "Credit transaction failed remark: " << credit_remark << "Error: " << std::get<std::string>(result);
 		//refund = credit source
-		std::string refund_remark = remark + "/refund of account_id: " + std::to_string(targetAccountId);
-		auto refund_result = transaction(conn, sourceAccountId, credit_target_amt, refund_remark); //t3
-		if (std::holds_alternative<std::string>(refund_result))
+		std::string refund_remark = remark + ": refund failed for account_id: " + std::to_string(targetAccountId);
+		result = transaction(conn, sourceAccountId, credit_target_amt, refund_remark); //t3
+		if (std::holds_alternative<std::string>(result))
 		{
-			CROW_LOG_CRITICAL <<  "Refund transaction failed remark: " << refund_remark << "Error: " << std::get<std::string>(refund_result);
-			return refund_remark + " Failed: " + std::get<std::string>(refund_result);
+			CROW_LOG_CRITICAL <<  "Refund transaction failed remark: " << refund_remark << "Error: " << std::get<std::string>(result);
+			return refund_remark + " Failed: " + std::get<std::string>(result);
 		}
 		CROW_LOG_WARNING << "Refund completed.";
 	}
 	// success
-	return std::get<Transaction>(debit_result);
+	return std::get<Transaction>(result);
 	}
 	catch(std::exception &ex){
 		CROW_LOG_CRITICAL <<  "Exception tranfer amount failed: " << ex.what();

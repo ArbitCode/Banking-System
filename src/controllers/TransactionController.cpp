@@ -8,19 +8,19 @@ void setupTransactionRoutes(crow::SimpleApp &app, nanodbc::connection &conn) {
 		if (type_params.empty() || (type_params != "credit" && type_params != "debit"))
 		{
 			CROW_LOG_ERROR << "Invalid type URL params.";
-			return crow::response(400, "Invalid type request");
+			return crow::response(400, R"({"error": "Invalid type request"})");
 		}
 		auto body = crow::json::load(req.body);
 		if(!body || !body.has("account_id") || !body.has("amount")){
 			CROW_LOG_ERROR << "Invalid body request";
-			return crow::response(400, "Invalid request");
+			return crow::response(400, R"({"error": "Invalid request"})");
 		}
 		std::string remark("");
 		int account_id = body["account_id"].i();
 		double amount = body["amount"].d();
 		if(amount <= 0){
 			CROW_LOG_ERROR << "Credit/Debit amount can not be less or equal to zero(0)";
-			return crow::response(400, "Invalid amount value");
+			return crow::response(400, R"({"error": "Invalid amount value"})");
 		}
 		amount = (type_params == "debit") ? (-1.0 * amount) : amount;
 		if (body.has("remark"))
@@ -31,7 +31,7 @@ void setupTransactionRoutes(crow::SimpleApp &app, nanodbc::connection &conn) {
 		auto result = TransactionService::transaction(conn, account_id, amount, remark);
 		if(std::holds_alternative<std::string>(result)){
 			CROW_LOG_ERROR << "Transaction failed error: " << std::get<std::string>(result);
-			return crow::response(400, R"({"error: ")" + std::get<std::string>(result) + R"("})");
+			return crow::response(400, R"({"error": ")" + std::get<std::string>(result) + R"("})");
 		}
 		const auto transaction = std::get<Transaction>(result);
 			crow::json::wvalue response;
@@ -59,7 +59,7 @@ void setupTransactionRoutes(crow::SimpleApp &app, nanodbc::connection &conn) {
 			return crow::response(200, trans_json);
 		}
 		CROW_LOG_ERROR << "Transaction not found.";
-		return crow::response(404, "Transaction not found"); });
+		return crow::response(404, R"({"error": "Transaction not found."})"); });
 
 	CROW_ROUTE(app, "/transaction/transfer").methods(crow::HTTPMethod::POST)([&conn](const crow::request &req)
 																																					 {
@@ -68,7 +68,7 @@ void setupTransactionRoutes(crow::SimpleApp &app, nanodbc::connection &conn) {
 		if (!body || !body.has("source_account_id") || !body.has("target_account_id") || !body.has("amount"))
 		{
 			CROW_LOG_ERROR << "invalid body request";
-			return crow::response(400, "Invalid request");
+			return crow::response(400, R"({"error": "Invalid request"})");
 		}
 		std::string remark("");
 		if (body.has("remark"))
@@ -81,7 +81,7 @@ void setupTransactionRoutes(crow::SimpleApp &app, nanodbc::connection &conn) {
 		if(amount <= 0)
 		{
 			CROW_LOG_ERROR << "Transfer amount can not be equal or less then zero(0)";
-			return crow::response(400, "Invalid amount value");
+			return crow::response(400, R"({"error": "Invalid amount value"})");
 		}
 		auto result = TransactionService::transferAmount(conn, targetAccountId, sourceAccountId, amount, remark); 
 		if(std::holds_alternative<std::string>(result)){
