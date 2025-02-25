@@ -1,13 +1,15 @@
-1. Nanodbc + odbc : DB
-2. crow : web framework : REST API
-3. FRONT-END : ??
-4. Logging : Boost.Log/log4cplus
+#### Opensource
 
-#### Opensource Lib : CLI : CLI11, .env: dotenv-cpp, webframework: CROW, DB: Nanodbc
+* CLI Parser: CLI
+* env file parser: cpp-dotenv
+* webframework: Crow
+* database: Nanodbc
+* HTTP Request: CPR
+* Unit Tests: GTEST
 
 #### **Backend (Crow + Nanodbc + ODBC + PostgreSQL)**
 
-* [ ] User authentication (signup, login, JWT-based auth)
+* [X] User authentication (signup, login, JWT-based auth)
 * [X] Account management (Open/Close/View account, List accounts)
 * [X] Transactions (deposits, withdrawals, transfers)
 * [X] Transaction history (list of past transactions)
@@ -15,7 +17,7 @@
 * [X] Logging
 * [X] database sechema sync (liquibase)
 * [X] UnitTest (GTEST)
-* [ ] Admin panel (manage users, view transactions) - Bank [department, staff, customer, role]
+* [X] Admin panel (manage users, view transactions) - Bank [department, staff, customer, role]
 
 #### **Web (React + Vite + Axios + React Router)**
 
